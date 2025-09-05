@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 import userRoutes from "./routes/userRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
 
@@ -31,11 +33,11 @@ connectDB();
 
 // API Routes
 app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
 
-// Basic Route for Testing
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
+// Error Middleware
+app.use(notFound);
+app.use(errorHandler);
 
 // Start the server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
