@@ -141,7 +141,7 @@ const ProductCatalogScreen = () => {
                     <Card.Body>
                       <Card.Title>{product.name}</Card.Title>
                       <Card.Text>
-                        <strong>${product.mrp.toFixed(2)}</strong>
+                        <strong>₹ {product.mrp.toFixed(2)}</strong>
                       </Card.Text>
                       <Card.Text>
                         <Badge bg={product.stock > 0 ? "success" : "danger"}>

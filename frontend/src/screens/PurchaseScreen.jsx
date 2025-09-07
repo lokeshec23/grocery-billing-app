@@ -281,7 +281,7 @@ const PurchaseScreen = () => {
                   </tbody>
                 </Table>
                 <h5 className="text-end">
-                  Total Cost: ${calculateTotalCost()}
+                  Total Cost: ₹{calculateTotalCost()}
                 </h5>
                 <Button type="submit" variant="success" className="w-100">
                   Record Purchase

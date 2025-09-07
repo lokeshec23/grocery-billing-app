@@ -68,7 +68,7 @@ const InventoryScreen = () => {
                         <td>{product.name}</td>
                         <td>{product.category}</td>
                         <td>{product.barcode}</td>
-                        <td>${product.mrp.toFixed(2)}</td>
+                        <td>₹ {product.mrp.toFixed(2)}</td>
                         <td>
                           {product.stock <= 10 && product.stock > 0 && (
                             <Badge bg="warning">

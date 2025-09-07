@@ -116,7 +116,7 @@ const ProductFormScreen = () => {
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="mrp">
-            <Form.Label>MRP ($)</Form.Label>
+            <Form.Label>MRP (₹)</Form.Label>
             <Form.Control
               type="number"
               placeholder="Enter price"
