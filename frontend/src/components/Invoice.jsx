@@ -40,29 +40,29 @@ const Invoice = ({ orderData }) => {
             <tr key={index}>
               <td>{item.name}</td>
               <td>{item.qty}</td>
-              <td>${item.price.toFixed(2)}</td>
-              <td>${(item.price * item.qty).toFixed(2)}</td>
+              <td>₹{item.price.toFixed(2)}</td>
+              <td>₹{(item.price * item.qty).toFixed(2)}</td>
             </tr>
           ))}
         </tbody>
       </Table>
       <div className="d-flex justify-content-end mb-2">
         <strong>Subtotal:</strong>
-        <span className="ms-auto">${itemsPrice.toFixed(2)}</span>
+        <span className="ms-auto">₹{itemsPrice.toFixed(2)}</span>
       </div>
       <div className="d-flex justify-content-end mb-2">
         <strong>Tax:</strong>
-        <span className="ms-auto">${taxPrice.toFixed(2)}</span>
+        <span className="ms-auto">₹{taxPrice.toFixed(2)}</span>
       </div>
       {discountAmount > 0 && (
         <div className="d-flex justify-content-end mb-2 text-success">
           <strong>Discount:</strong>
-          <span className="ms-auto">- ${discountAmount.toFixed(2)}</span>
+          <span className="ms-auto">- ₹{discountAmount.toFixed(2)}</span>
         </div>
       )}
       <div className="d-flex justify-content-end border-top pt-2">
         <h4>Total:</h4>
-        <h4 className="ms-auto">${totalPrice.toFixed(2)}</h4>
+        <h4 className="ms-auto">₹{totalPrice.toFixed(2)}</h4>
       </div>
     </Card>
   );

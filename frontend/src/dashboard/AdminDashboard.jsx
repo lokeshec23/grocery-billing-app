@@ -63,7 +63,7 @@ const AdminDashboard = () => {
     labels: stats.salesByDate.map((item) => item._id),
     datasets: [
       {
-        label: "Sales ($)",
+        label: "Sales (₹)",
         data: stats.salesByDate.map((item) => item.totalSales),
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
@@ -104,7 +104,7 @@ const AdminDashboard = () => {
           <Card className="text-center p-4 h-100">
             <h3>Total Revenue</h3>
             <p className="display-4 fw-bold text-success">
-              ${stats.totalRevenue.toFixed(2)}
+              ₹{stats.totalRevenue.toFixed(2)}
             </p>
           </Card>
         </Col>

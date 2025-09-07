@@ -62,7 +62,7 @@ const OrderListScreen = () => {
                 </Col>
                 <Col md={6} className="text-end">
                   <p>
-                    <strong>Total Revenue:</strong> ${calculateTotalSales()}
+                    <strong>Total Revenue:</strong> ₹{calculateTotalSales()}
                   </p>
                 </Col>
               </Row>
@@ -82,7 +82,7 @@ const OrderListScreen = () => {
                       <tr key={order._id}>
                         <td>{order._id.substring(18)}</td>
                         <td>{order.createdAt.substring(0, 10)}</td>
-                        <td>${order.totalPrice.toFixed(2)}</td>
+                        <td>₹{order.totalPrice.toFixed(2)}</td>
                         <td>{order.paymentMethod}</td>
                         <td>{order.user.name}</td>
                       </tr>

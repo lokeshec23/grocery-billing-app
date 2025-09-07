@@ -188,7 +188,7 @@ const PurchaseScreen = () => {
                     {getFilteredProducts().map((product) => (
                       <tr key={product._id}>
                         <td>{product.name}</td>
-                        <td>${product.mrp.toFixed(2)}</td>
+                        <td>₹{product.mrp.toFixed(2)}</td>
                         <td>{product.stock}</td>
                         <td>
                           <Button

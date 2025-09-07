@@ -129,7 +129,7 @@ const StaffDashboard = () => {
                     {sales.map((sale) => (
                       <tr key={sale._id}>
                         <td>{new Date(sale.createdAt).toLocaleDateString()}</td>
-                        <td>${sale.totalPrice.toFixed(2)}</td>
+                        <td>₹{sale.totalPrice.toFixed(2)}</td>
                         <td>{sale.orderItems.length} items</td>
                       </tr>
                     ))}

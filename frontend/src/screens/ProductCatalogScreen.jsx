@@ -209,7 +209,7 @@ const ProductCatalogScreen = () => {
                     <Card.Body>
                       <Card.Title>{product.name}</Card.Title>
                       <Card.Text>
-                        <strong>${product.mrp.toFixed(2)}</strong>
+                        <strong>₹{product.mrp.toFixed(2)}</strong>
                       </Card.Text>
                       <Card.Text>
                         <Badge bg={product.stock > 0 ? "success" : "danger"}>
@@ -248,28 +248,28 @@ const ProductCatalogScreen = () => {
                         <span>
                           {item.name} ({item.qty})
                         </span>
-                        <span>${(item.mrp * item.qty).toFixed(2)}</span>
+                        <span>₹{(item.mrp * item.qty).toFixed(2)}</span>
                       </li>
                     ))}
                   </ul>
                   <div className="border-top pt-2 mt-2">
                     <div className="d-flex justify-content-between">
                       <p>Subtotal:</p>
-                      <p>${itemsPrice.toFixed(2)}</p>
+                      <p>₹{itemsPrice.toFixed(2)}</p>
                     </div>
                     <div className="d-flex justify-content-between">
                       <p>Tax:</p>
-                      <p>${taxPrice.toFixed(2)}</p>
+                      <p>₹{taxPrice.toFixed(2)}</p>
                     </div>
                     {discountAmount > 0 && (
                       <div className="d-flex justify-content-between text-success">
                         <p>Discount:</p>
-                        <p>-${discountAmount.toFixed(2)}</p>
+                        <p>-₹{discountAmount.toFixed(2)}</p>
                       </div>
                     )}
                     <div className="d-flex justify-content-between">
                       <h5 className="fw-bold">Total:</h5>
-                      <h5 className="fw-bold">${totalPrice.toFixed(2)}</h5>
+                      <h5 className="fw-bold">₹{totalPrice.toFixed(2)}</h5>
                     </div>
                   </div>
                   <Form className="mt-3">

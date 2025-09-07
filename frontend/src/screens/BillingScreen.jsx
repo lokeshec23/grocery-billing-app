@@ -287,7 +287,7 @@ const BillingScreen = () => {
                       <tr key={product._id}>
                         <td>{product.name}</td>
                         <td>{product.category}</td>
-                        <td>${product.mrp.toFixed(2)}</td>
+                        <td>₹ {product.mrp.toFixed(2)}</td>
                         <td>
                           {product.stock <= 10 && product.stock > 0 && (
                             <Badge bg="warning">
@@ -353,7 +353,7 @@ const BillingScreen = () => {
                             style={{ width: "60px" }}
                           />
                         </td>
-                        <td>${(item.mrp * item.qty).toFixed(2)}</td>
+                        <td>₹{(item.mrp * item.qty).toFixed(2)}</td>
                         <td>
                           <Button
                             variant="danger"
@@ -371,21 +371,21 @@ const BillingScreen = () => {
               <Card.Body>
                 <div className="d-flex justify-content-between">
                   <p>Subtotal:</p>
-                  <p>${itemsPrice.toFixed(2)}</p>
+                  <p>₹{itemsPrice.toFixed(2)}</p>
                 </div>
                 <div className="d-flex justify-content-between">
                   <p>Tax:</p>
-                  <p>${taxPrice.toFixed(2)}</p>
+                  <p>₹{taxPrice.toFixed(2)}</p>
                 </div>
                 {discountAmount > 0 && (
                   <div className="d-flex justify-content-between text-success">
                     <p>Discount:</p>
-                    <p>-${discountAmount.toFixed(2)}</p>
+                    <p>-₹{discountAmount.toFixed(2)}</p>
                   </div>
                 )}
                 <div className="d-flex justify-content-between border-top pt-2 mt-2">
                   <h5 className="fw-bold">Total:</h5>
-                  <h5 className="fw-bold">${totalPrice.toFixed(2)}</h5>
+                  <h5 className="fw-bold">₹{totalPrice.toFixed(2)}</h5>
                 </div>
                 <Form className="mt-3">
                   <InputGroup>
