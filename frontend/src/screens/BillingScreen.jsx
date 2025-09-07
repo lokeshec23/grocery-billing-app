@@ -64,7 +64,7 @@ const BillingScreen = () => {
         {
           product: product._id,
           name: product.name,
-          barcode: product.barcode,
+          barcode: product.barcode, // Add this line
           qty: 1,
           mrp: product.mrp,
           taxRate: product.taxRate,
@@ -121,7 +121,7 @@ const BillingScreen = () => {
     const orderItems = cart.map((item) => ({
       name: item.name,
       qty: item.qty,
-      barcode: item.barcode,
+      barcode: item.barcode, // Ensure this line is present
       price: item.mrp,
       product: item.product,
     }));

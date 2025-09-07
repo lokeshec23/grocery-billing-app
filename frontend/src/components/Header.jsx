@@ -10,6 +10,7 @@ import {
   faClipboardList,
   faChartBar,
   faUserPlus,
+  faStore,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
@@ -31,6 +32,11 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               {/* Conditional rendering for different roles */}
+              <LinkContainer to="/catalog">
+                <Nav.Link>
+                  <FontAwesomeIcon icon={faStore} /> Shop
+                </Nav.Link>
+              </LinkContainer>
               {user && user.role === "staff" && (
                 <LinkContainer to="/billing">
                   <Nav.Link>

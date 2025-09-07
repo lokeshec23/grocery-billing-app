@@ -34,7 +34,7 @@ const MyOrdersScreen = () => {
       }
     };
 
-    if (user && user.role === "customer") {
+    if (user && user.role === "customer" && user.token) {
       fetchMyOrders();
     }
   }, [user, navigate]);

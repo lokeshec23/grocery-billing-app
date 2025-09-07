@@ -6,13 +6,14 @@ import Footer from "./components/Footer";
 import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
-import MyOrdersScreen from "./screens/MyOrderScreen";
+import MyOrdersScreen from "./screens/MyOrdersScreen";
 import ProductListScreen from "./screens/ProductListScreen";
 import ProductAddScreen from "./screens/ProductAddScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
 import BillingScreen from "./screens/BillingScreen";
 import InventoryScreen from "./screens/InventoryScreen";
 import OrderListScreen from "./screens/OrderListScreen";
+import ProductCatalogScreen from "./screens/ProductCatalogScreen";
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
             <Route path="/billing" element={<BillingScreen />} />
             <Route path="/inventory" element={<InventoryScreen />} />
             <Route path="/admin/sales-report" element={<OrderListScreen />} />
+            <Route path="/catalog" element={<ProductCatalogScreen />} />
             <Route path="/" element={<HomeScreen />} exact />
           </Routes>
         </Container>
