@@ -1,15 +1,31 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Container, Row, Col, Card, Button, Badge } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Badge,
+  Form,
+  InputGroup,
+} from "react-bootstrap";
 import { UserContext } from "../context/UserContext";
 import api from "../utils/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faShoppingCart,
+  faPlus,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 
 const ProductCatalogScreen = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [checkoutMessage, setCheckoutMessage] = useState(null);
+  const [discountCode, setDiscountCode] = useState("");
+  const [discountAmount, setDiscountAmount] = useState(0);
 
   const { state } = useContext(UserContext);
   const { user } = state;
@@ -47,7 +63,7 @@ const ProductCatalogScreen = () => {
         {
           product: product._id,
           name: product.name,
-          barcode: product.barcode, // Add this line
+          barcode: product.barcode,
           qty: 1,
           mrp: product.mrp,
           taxRate: product.taxRate,
@@ -55,6 +71,7 @@ const ProductCatalogScreen = () => {
       ]);
     }
   };
+
   const removeFromCartHandler = (productId) => {
     setCart(cart.filter((item) => item.product !== productId));
   };
@@ -65,27 +82,64 @@ const ProductCatalogScreen = () => {
       (acc, item) => acc + ((item.mrp * item.taxRate) / 100) * item.qty,
       0
     );
-    const totalPrice = itemsPrice + taxPrice;
+    const totalPrice = itemsPrice + taxPrice - discountAmount;
     return { itemsPrice, taxPrice, totalPrice };
+  };
+
+  const applyDiscountHandler = async () => {
+    try {
+      if (!user) {
+        setCheckoutMessage({
+          type: "danger",
+          text: "You must be logged in to apply a discount.",
+        });
+        return;
+      }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await api.get(
+        `/discounts/validate/${discountCode}`,
+        config
+      );
+      if (data.type === "fixed") {
+        setDiscountAmount(data.value);
+      } else if (data.type === "percentage") {
+        const total = cart.reduce((acc, item) => acc + item.mrp * item.qty, 0);
+        setDiscountAmount(total * (data.value / 100));
+      }
+      setCheckoutMessage({ type: "success", text: "Discount applied!" });
+    } catch (err) {
+      setDiscountAmount(0);
+      setCheckoutMessage({
+        type: "danger",
+        text: err.response?.data?.message || "Invalid discount code",
+      });
+    }
   };
 
   const { itemsPrice, taxPrice, totalPrice } = calculateTotals();
 
   const checkoutHandler = async () => {
     if (cart.length === 0) {
-      alert("Your cart is empty.");
+      setCheckoutMessage({ type: "danger", text: "Your cart is empty." });
       return;
     }
 
     if (!user) {
-      alert("Please log in or sign up to place an order.");
+      setCheckoutMessage({
+        type: "danger",
+        text: "Please log in or sign up to place an order.",
+      });
       return;
     }
 
     const orderItems = cart.map((item) => ({
       name: item.name,
       qty: item.qty,
-      barcode: item.barcode, // Barcode is not in cart state, we'll need to fetch/store it
+      barcode: item.barcode,
       price: item.mrp,
       product: item.product,
     }));
@@ -105,21 +159,35 @@ const ProductCatalogScreen = () => {
           paymentMethod: "Online Payment",
           itemsPrice,
           taxPrice,
+          discountAmount,
           totalPrice,
         },
         config
       );
 
       setCart([]);
-      alert("Order placed successfully!");
+      setDiscountAmount(0);
+      setDiscountCode("");
+      setCheckoutMessage({
+        type: "success",
+        text: "Order placed successfully!",
+      });
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to place order");
+      setCheckoutMessage({
+        type: "danger",
+        text: err.response?.data?.message || "Failed to place order",
+      });
     }
   };
 
   return (
     <Container className="my-5">
       <h1 className="text-center mb-4">Product Catalog</h1>
+      {checkoutMessage && (
+        <div className={`alert alert-${checkoutMessage.type}`}>
+          {checkoutMessage.text}
+        </div>
+      )}
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -141,7 +209,7 @@ const ProductCatalogScreen = () => {
                     <Card.Body>
                       <Card.Title>{product.name}</Card.Title>
                       <Card.Text>
-                        <strong>₹ {product.mrp.toFixed(2)}</strong>
+                        <strong>${product.mrp.toFixed(2)}</strong>
                       </Card.Text>
                       <Card.Text>
                         <Badge bg={product.stock > 0 ? "success" : "danger"}>
@@ -193,11 +261,33 @@ const ProductCatalogScreen = () => {
                       <p>Tax:</p>
                       <p>${taxPrice.toFixed(2)}</p>
                     </div>
+                    {discountAmount > 0 && (
+                      <div className="d-flex justify-content-between text-success">
+                        <p>Discount:</p>
+                        <p>-${discountAmount.toFixed(2)}</p>
+                      </div>
+                    )}
                     <div className="d-flex justify-content-between">
                       <h5 className="fw-bold">Total:</h5>
                       <h5 className="fw-bold">${totalPrice.toFixed(2)}</h5>
                     </div>
                   </div>
+                  <Form className="mt-3">
+                    <InputGroup>
+                      <Form.Control
+                        type="text"
+                        placeholder="Enter discount code"
+                        value={discountCode}
+                        onChange={(e) => setDiscountCode(e.target.value)}
+                      />
+                      <Button
+                        variant="outline-secondary"
+                        onClick={applyDiscountHandler}
+                      >
+                        Apply
+                      </Button>
+                    </InputGroup>
+                  </Form>
                   <Button
                     variant="success"
                     className="w-100 mt-3"

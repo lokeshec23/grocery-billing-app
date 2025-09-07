@@ -9,9 +9,12 @@ import {
   Table,
   Badge,
   Card,
+  InputGroup,
 } from "react-bootstrap";
 import { UserContext } from "../context/UserContext";
 import api from "../utils/api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const BillingScreen = () => {
   const [products, setProducts] = useState([]);
@@ -20,6 +23,8 @@ const BillingScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [checkoutMessage, setCheckoutMessage] = useState(null);
+  const [discountCode, setDiscountCode] = useState("");
+  const [discountAmount, setDiscountAmount] = useState(0);
 
   const { state } = useContext(UserContext);
   const { user } = state;
@@ -64,7 +69,7 @@ const BillingScreen = () => {
         {
           product: product._id,
           name: product.name,
-          barcode: product.barcode, // Add this line
+          barcode: product.barcode,
           qty: 1,
           mrp: product.mrp,
           taxRate: product.taxRate,
@@ -102,8 +107,35 @@ const BillingScreen = () => {
       (acc, item) => acc + ((item.mrp * item.taxRate) / 100) * item.qty,
       0
     );
-    const totalPrice = itemsPrice + taxPrice;
+    const totalPrice = itemsPrice + taxPrice - discountAmount;
     return { itemsPrice, taxPrice, totalPrice };
+  };
+
+  const applyDiscountHandler = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await api.get(
+        `/discounts/validate/${discountCode}`,
+        config
+      );
+      if (data.type === "fixed") {
+        setDiscountAmount(data.value);
+      } else if (data.type === "percentage") {
+        const total = cart.reduce((acc, item) => acc + item.mrp * item.qty, 0);
+        setDiscountAmount(total * (data.value / 100));
+      }
+      setCheckoutMessage({ type: "success", text: "Discount applied!" });
+    } catch (err) {
+      setDiscountAmount(0);
+      setCheckoutMessage({
+        type: "danger",
+        text: err.response?.data?.message || "Invalid discount code",
+      });
+    }
   };
 
   const { itemsPrice, taxPrice, totalPrice } = calculateTotals();
@@ -121,7 +153,7 @@ const BillingScreen = () => {
     const orderItems = cart.map((item) => ({
       name: item.name,
       qty: item.qty,
-      barcode: item.barcode, // Ensure this line is present
+      barcode: item.barcode,
       price: item.mrp,
       product: item.product,
     }));
@@ -138,15 +170,18 @@ const BillingScreen = () => {
         "/orders",
         {
           orderItems,
-          paymentMethod: "Cash", // Dummy value for now
+          paymentMethod: "Cash",
           itemsPrice,
           taxPrice,
+          discountAmount,
           totalPrice,
         },
         config
       );
 
       setCart([]);
+      setDiscountAmount(0);
+      setDiscountCode("");
       setCheckoutMessage({
         type: "success",
         text: "Order placed successfully!",
@@ -274,7 +309,7 @@ const BillingScreen = () => {
                             className="btn-sm"
                             onClick={() => removeFromCartHandler(item.product)}
                           >
-                            <i className="fas fa-trash"></i>
+                            <FontAwesomeIcon icon={faTrash} />
                           </Button>
                         </td>
                       </tr>
@@ -291,10 +326,32 @@ const BillingScreen = () => {
                   <p>Tax:</p>
                   <p>${taxPrice.toFixed(2)}</p>
                 </div>
+                {discountAmount > 0 && (
+                  <div className="d-flex justify-content-between text-success">
+                    <p>Discount:</p>
+                    <p>-${discountAmount.toFixed(2)}</p>
+                  </div>
+                )}
                 <div className="d-flex justify-content-between border-top pt-2 mt-2">
                   <h5 className="fw-bold">Total:</h5>
                   <h5 className="fw-bold">${totalPrice.toFixed(2)}</h5>
                 </div>
+                <Form className="mt-3">
+                  <InputGroup>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter discount code"
+                      value={discountCode}
+                      onChange={(e) => setDiscountCode(e.target.value)}
+                    />
+                    <Button
+                      variant="outline-secondary"
+                      onClick={applyDiscountHandler}
+                    >
+                      Apply
+                    </Button>
+                  </InputGroup>
+                </Form>
               </Card.Body>
               <Button
                 variant="success"

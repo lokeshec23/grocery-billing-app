@@ -13,6 +13,7 @@ import {
   faStore,
   faTruck,
   faFileInvoiceDollar,
+  faTag,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
@@ -71,6 +72,11 @@ const Header = () => {
                     <LinkContainer to="/admin/purchases">
                       <NavDropdown.Item>Record Purchase</NavDropdown.Item>
                     </LinkContainer>
+                    <LinkContainer to="/admin/discounts">
+                      <NavDropdown.Item>
+                        <FontAwesomeIcon icon={faTag} /> Discounts
+                      </NavDropdown.Item>
+                    </LinkContainer>
                   </NavDropdown>
                 </>
               )}
@@ -79,6 +85,7 @@ const Header = () => {
                   <Nav.Link>My Orders</Nav.Link>
                 </LinkContainer>
               )}
+
               {user ? (
                 <NavDropdown
                   title={
