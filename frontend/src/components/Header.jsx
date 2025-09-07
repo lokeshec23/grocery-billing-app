@@ -14,6 +14,7 @@ import {
   faTruck,
   faFileInvoiceDollar,
   faTag,
+  faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
@@ -34,14 +35,11 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              {user && user.role === "staff" && user.role === "customer" && (
-                <LinkContainer to="/catalog">
-                  <Nav.Link>
-                    <FontAwesomeIcon icon={faStore} /> Shop
-                  </Nav.Link>
-                </LinkContainer>
-              )}
-
+              <LinkContainer to="/catalog">
+                <Nav.Link>
+                  <FontAwesomeIcon icon={faStore} /> Shop
+                </Nav.Link>
+              </LinkContainer>
               {user && user.role === "staff" && (
                 <LinkContainer to="/billing">
                   <Nav.Link>
@@ -78,6 +76,12 @@ const Header = () => {
                     <LinkContainer to="/admin/discounts">
                       <NavDropdown.Item>
                         <FontAwesomeIcon icon={faTag} /> Discounts
+                      </NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Divider />
+                    <LinkContainer to="/admin/register-staff">
+                      <NavDropdown.Item>
+                        <FontAwesomeIcon icon={faUserTie} /> Register Staff
                       </NavDropdown.Item>
                     </LinkContainer>
                   </NavDropdown>
