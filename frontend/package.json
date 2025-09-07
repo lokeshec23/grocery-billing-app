@@ -16,6 +16,8 @@
     "@fortawesome/react-fontawesome": "^3.0.2",
     "axios": "^1.11.0",
     "bootstrap": "^5.3.8",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.2",
     "react": "^19.1.1",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.1.1",

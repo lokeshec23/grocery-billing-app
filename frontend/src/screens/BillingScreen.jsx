@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -14,7 +14,15 @@ import {
 import { UserContext } from "../context/UserContext";
 import api from "../utils/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faTrash,
+  faPrint,
+  faFilePdf,
+} from "@fortawesome/free-solid-svg-icons";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import Invoice from "../components/Invoice";
 
 const BillingScreen = () => {
   const [products, setProducts] = useState([]);
@@ -25,6 +33,9 @@ const BillingScreen = () => {
   const [checkoutMessage, setCheckoutMessage] = useState(null);
   const [discountCode, setDiscountCode] = useState("");
   const [discountAmount, setDiscountAmount] = useState(0);
+  const [lastOrder, setLastOrder] = useState(null);
+
+  const invoiceRef = useRef();
 
   const { state } = useContext(UserContext);
   const { user } = state;
@@ -166,7 +177,7 @@ const BillingScreen = () => {
         },
       };
 
-      await api.post(
+      const { data } = await api.post(
         "/orders",
         {
           orderItems,
@@ -179,6 +190,7 @@ const BillingScreen = () => {
         config
       );
 
+      setLastOrder(data); // Store the created order
       setCart([]);
       setDiscountAmount(0);
       setDiscountCode("");
@@ -194,12 +206,52 @@ const BillingScreen = () => {
     }
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handlePDFExport = () => {
+    const input = document.getElementById("invoice-content");
+    if (!input) {
+      setCheckoutMessage({
+        type: "danger",
+        text: "Invoice content not found for export.",
+      });
+      return;
+    }
+
+    html2canvas(input, { scale: 2 }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png"); // ensures valid base64
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`invoice_${lastOrder._id.substring(18)}.pdf`);
+    });
+  };
+
   return (
     <Container className="my-5">
       <h1 className="text-center mb-4">Point of Sale</h1>
       {checkoutMessage && (
-        <div className={`alert alert-${checkoutMessage.type}`}>
-          {checkoutMessage.text}
+        <div
+          className={`alert alert-${checkoutMessage.type} d-flex justify-content-between align-items-center`}
+        >
+          <span>{checkoutMessage.text}</span>
+          {checkoutMessage.type === "success" && (
+            <div>
+              <Button variant="info" onClick={handlePDFExport} className="ms-3">
+                <FontAwesomeIcon icon={faFilePdf} /> Export PDF
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={handlePrint}
+                className="ms-2"
+              >
+                <FontAwesomeIcon icon={faPrint} /> Print
+              </Button>
+            </div>
+          )}
         </div>
       )}
       {loading ? (
@@ -258,7 +310,7 @@ const BillingScreen = () => {
                             onClick={() => addToCartHandler(product)}
                             disabled={product.stock === 0}
                           >
-                            Add
+                            <FontAwesomeIcon icon={faPlus} />
                           </Button>
                         </td>
                       </tr>
@@ -268,7 +320,6 @@ const BillingScreen = () => {
               </div>
             </Card>
           </Col>
-
           <Col md={5}>
             <Card className="p-4 shadow-sm">
               <h4 className="mb-3">Invoice</h4>
@@ -364,6 +415,14 @@ const BillingScreen = () => {
             </Card>
           </Col>
         </Row>
+      )}
+      {lastOrder && (
+        <div
+          id="invoice-content"
+          style={{ position: "absolute", left: "-9999px", top: 0 }}
+        >
+          <Invoice orderData={lastOrder} />
+        </div>
       )}
     </Container>
   );
