@@ -35,11 +35,13 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <LinkContainer to="/catalog">
-                <Nav.Link>
-                  <FontAwesomeIcon icon={faStore} /> Shop
-                </Nav.Link>
-              </LinkContainer>
+              {user && user.role === "staff" && user.role === "customer" && (
+                <LinkContainer to="/catalog">
+                  <Nav.Link>
+                    <FontAwesomeIcon icon={faStore} /> Shop
+                  </Nav.Link>
+                </LinkContainer>
+              )}
               {user && user.role === "staff" && (
                 <LinkContainer to="/billing">
                   <Nav.Link>
