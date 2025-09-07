@@ -34,7 +34,7 @@ const Header = () => {
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Container>
-          <LinkContainer to={user ? "/dashboard" : "/"}>
+          <LinkContainer to={user ? "/home" : "/"}>
             <Navbar.Brand>Grocery Billing</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
