@@ -7,13 +7,16 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/productController.js";
-import { protect, admin } from "../middleware/authMiddleware.js";
+import { protect, adminOnly } from "../middleware/authMiddleware.js";
 
-router.route("/").get(getProducts).post(protect, admin, createProduct);
+router
+  .route("/")
+  .get(protect, getProducts)
+  .post(protect, adminOnly, createProduct);
 router
   .route("/:id")
-  .get(getProductById)
-  .put(protect, admin, updateProduct)
-  .delete(protect, admin, deleteProduct);
+  .get(protect, getProductById)
+  .put(protect, adminOnly, updateProduct)
+  .delete(protect, adminOnly, deleteProduct);
 
 export default router;

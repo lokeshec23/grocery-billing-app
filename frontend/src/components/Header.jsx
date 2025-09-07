@@ -21,6 +21,7 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
+              {/* Conditional rendering for different roles */}
               {user && user.role === "staff" && (
                 <LinkContainer to="/billing">
                   <Nav.Link>Billing</Nav.Link>
@@ -31,6 +32,13 @@ const Header = () => {
                   <Nav.Link>Products</Nav.Link>
                 </LinkContainer>
               )}
+              {/* Add a link for customer to view orders (to be built later) */}
+              {user && user.role === "customer" && (
+                <LinkContainer to="/my-orders">
+                  <Nav.Link>My Orders</Nav.Link>
+                </LinkContainer>
+              )}
+
               {user ? (
                 <NavDropdown title={user.name} id="username">
                   <NavDropdown.Item onClick={logoutHandler}>
