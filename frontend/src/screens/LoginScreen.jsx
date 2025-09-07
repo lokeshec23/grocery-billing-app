@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import api from "../utils/api"; // Import the new api instance
+import { Form, Button, Col, Row } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../utils/api";
 import { UserContext } from "../context/UserContext";
 
 const LoginScreen = () => {
@@ -15,12 +14,11 @@ const LoginScreen = () => {
   // Redirect if user is already logged in
   useEffect(() => {
     if (state.user) {
-      navigate("/");
+      navigate("/home");
     }
   }, [state.user, navigate]);
 
   const submitHandler = async (e) => {
-    debugger;
     e.preventDefault();
     setError(null); // Clear previous errors
 
@@ -75,6 +73,11 @@ const LoginScreen = () => {
             Sign In
           </Button>
         </Form>
+        <Row className="py-3">
+          <Col>
+            New Customer? <Link to="/register">Register</Link>
+          </Col>
+        </Row>
       </Col>
     </div>
   );

@@ -32,7 +32,7 @@ const App = () => {
               element={<ProductEditScreen />}
             />
             <Route path="/products" element={<ProductListScreen />} />
-            <Route path="/login" element={<LoginScreen />} />
+            <Route path="/" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route path="/my-orders" element={<MyOrdersScreen />} />
             <Route path="/billing" element={<BillingScreen />} />
@@ -46,7 +46,7 @@ const App = () => {
               element={<StaffRegisterScreen />}
             />
             <Route path="/catalog" element={<ProductCatalogScreen />} />
-            <Route path="/" element={<HomeScreen />} exact />
+            <Route path="/home" element={<HomeScreen />} exact />
           </Routes>
         </Container>
       </main>

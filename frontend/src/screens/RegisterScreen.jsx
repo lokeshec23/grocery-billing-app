@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import api from "../utils/api";
 
@@ -11,12 +11,13 @@ const RegisterScreen = () => {
   const [error, setError] = useState(null);
   const { state, dispatch } = useContext(UserContext);
   const navigate = useNavigate();
+  const { user } = state;
 
   useEffect(() => {
-    if (state.user) {
-      navigate("/");
+    if (user) {
+      navigate("/home");
     }
-  }, [state.user, navigate]);
+  }, [user, navigate]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -78,6 +79,11 @@ const RegisterScreen = () => {
             Register
           </Button>
         </Form>
+        <Row className="py-3">
+          <Col>
+            Already have an account? <Link to="/">Sign In</Link>
+          </Col>
+        </Row>
       </Col>
     </div>
   );

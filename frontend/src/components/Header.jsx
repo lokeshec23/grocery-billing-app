@@ -16,20 +16,22 @@ import {
   faTag,
   faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { state, dispatch } = useContext(UserContext);
   const { user } = state;
-
+  const navigate = useNavigate();
   const logoutHandler = () => {
     dispatch({ type: "LOGOUT" });
+    navigate("/");
   };
 
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Container>
-          <LinkContainer to="/">
+          <LinkContainer to={user ? "/dashboard" : "/"}>
             <Navbar.Brand>Grocery Billing</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -95,33 +97,36 @@ const Header = () => {
                 </LinkContainer>
               )}
 
-              {user ? (
-                <NavDropdown
-                  title={
-                    <span>
-                      <FontAwesomeIcon icon={faUser} /> {user.name}
-                    </span>
-                  }
-                  id="username"
-                >
-                  <NavDropdown.Item onClick={logoutHandler}>
-                    Logout
-                  </NavDropdown.Item>
-                </NavDropdown>
-              ) : (
-                <>
-                  <LinkContainer to="/login">
-                    <Nav.Link>
-                      <FontAwesomeIcon icon={faUser} /> Sign In
-                    </Nav.Link>
-                  </LinkContainer>
-                  <LinkContainer to="/register">
-                    <Nav.Link>
-                      <FontAwesomeIcon icon={faUserPlus} /> Sign Up
-                    </Nav.Link>
-                  </LinkContainer>
-                </>
-              )}
+              {
+                user && (
+                  <NavDropdown
+                    title={
+                      <span>
+                        <FontAwesomeIcon icon={faUser} /> {user.name}
+                      </span>
+                    }
+                    id="username"
+                  >
+                    <NavDropdown.Item onClick={logoutHandler}>
+                      Logout
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                )
+                // : (
+                //   <>
+                //     <LinkContainer to="/">
+                //       <Nav.Link>
+                //         <FontAwesomeIcon icon={faUser} /> Login
+                //       </Nav.Link>
+                //     </LinkContainer>
+                //     <LinkContainer to="/register">
+                //       <Nav.Link>
+                //         <FontAwesomeIcon icon={faUserPlus} /> Sign Up
+                //       </Nav.Link>
+                //     </LinkContainer>
+                //   </>
+                // )
+              }
             </Nav>
           </Navbar.Collapse>
         </Container>
