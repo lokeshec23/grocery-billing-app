@@ -1,6 +1,10 @@
 import express from "express";
 const router = express.Router();
-import { addOrderItems, getOrders } from "../controllers/orderController.js";
+import {
+  addOrderItems,
+  getOrders,
+  getMyOrders,
+} from "../controllers/orderController.js";
 import {
   protect,
   staffOrCustomer,
@@ -11,5 +15,6 @@ router
   .route("/")
   .post(protect, staffOrCustomer, addOrderItems)
   .get(protect, adminOnly, getOrders);
+router.route("/myorders").get(protect, getMyOrders); // Ensure this line is present
 
 export default router;

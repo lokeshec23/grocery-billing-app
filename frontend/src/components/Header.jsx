@@ -9,6 +9,7 @@ import {
   faCog,
   faClipboardList,
   faChartBar,
+  faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
@@ -76,11 +77,18 @@ const Header = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                <LinkContainer to="/login">
-                  <Nav.Link>
-                    <FontAwesomeIcon icon={faUser} /> Sign In
-                  </Nav.Link>
-                </LinkContainer>
+                <>
+                  <LinkContainer to="/login">
+                    <Nav.Link>
+                      <FontAwesomeIcon icon={faUser} /> Sign In
+                    </Nav.Link>
+                  </LinkContainer>
+                  <LinkContainer to="/register">
+                    <Nav.Link>
+                      <FontAwesomeIcon icon={faUserPlus} /> Sign Up
+                    </Nav.Link>
+                  </LinkContainer>
+                </>
               )}
             </Nav>
           </Navbar.Collapse>
