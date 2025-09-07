@@ -60,4 +60,48 @@ const getMyOrders = asyncHandler(async (req, res) => {
   res.json(orders);
 });
 
-export { addOrderItems, getOrders, getMyOrders };
+// @desc    Get dashboard statistics
+// @route   GET /api/orders/dashboard-stats
+// @access  Private/Admin
+const getDashboardStats = asyncHandler(async (req, res) => {
+  const totalOrders = await Order.countDocuments({});
+  const totalRevenue = await Order.aggregate([
+    {
+      $group: {
+        _id: null,
+        total: { $sum: "$totalPrice" },
+      },
+    },
+  ]);
+
+  const topSellingProducts = await Order.aggregate([
+    { $unwind: "$orderItems" },
+    {
+      $group: {
+        _id: "$orderItems.name",
+        totalSold: { $sum: "$orderItems.qty" },
+      },
+    },
+    { $sort: { totalSold: -1 } },
+    { $limit: 5 },
+  ]);
+
+  const salesByDate = await Order.aggregate([
+    {
+      $group: {
+        _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+        totalSales: { $sum: "$totalPrice" },
+      },
+    },
+    { $sort: { _id: 1 } },
+  ]);
+
+  res.json({
+    totalOrders,
+    totalRevenue: totalRevenue.length > 0 ? totalRevenue[0].total : 0,
+    topSellingProducts,
+    salesByDate,
+  });
+});
+
+export { addOrderItems, getOrders, getMyOrders, getDashboardStats };
