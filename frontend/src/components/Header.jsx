@@ -7,6 +7,8 @@ import {
   faUser,
   faShoppingCart,
   faCog,
+  faClipboardList,
+  faChartBar,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
@@ -36,11 +38,23 @@ const Header = () => {
                 </LinkContainer>
               )}
               {user && user.role === "admin" && (
-                <LinkContainer to="/products">
-                  <Nav.Link>
-                    <FontAwesomeIcon icon={faCog} /> Products
-                  </Nav.Link>
-                </LinkContainer>
+                <>
+                  <LinkContainer to="/products">
+                    <Nav.Link>
+                      <FontAwesomeIcon icon={faCog} /> Products
+                    </Nav.Link>
+                  </LinkContainer>
+                  <LinkContainer to="/inventory">
+                    <Nav.Link>
+                      <FontAwesomeIcon icon={faClipboardList} /> Inventory
+                    </Nav.Link>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/sales-report">
+                    <Nav.Link>
+                      <FontAwesomeIcon icon={faChartBar} /> Sales
+                    </Nav.Link>
+                  </LinkContainer>
+                </>
               )}
               {user && user.role === "customer" && (
                 <LinkContainer to="/my-orders">

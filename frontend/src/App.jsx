@@ -9,7 +9,7 @@ import ProductListScreen from "./screens/ProductListScreen";
 import ProductAddScreen from "./screens/ProductAddScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
 import BillingScreen from "./screens/BillingScreen";
-
+import OrderListScreen from "./screens/OrderListScreen";
 const App = () => {
   return (
     <Router>
@@ -18,6 +18,7 @@ const App = () => {
         <Container>
           <Routes>
             <Route path="/admin/product/add" element={<ProductAddScreen />} />
+            <Route path="/admin/sales-report" element={<OrderListScreen />} />
             <Route
               path="/admin/product/:id/edit"
               element={<ProductEditScreen />}
