@@ -104,4 +104,42 @@ const getDashboardStats = asyncHandler(async (req, res) => {
   });
 });
 
-export { addOrderItems, getOrders, getMyOrders, getDashboardStats };
+// @desc    Get logged-in staff's sales history
+// @route   GET /api/orders/my-sales
+// @access  Private/Staff
+const getMySales = asyncHandler(async (req, res) => {
+  const sales = await Order.find({ user: req.user._id }).sort({
+    createdAt: -1,
+  });
+  res.json(sales);
+});
+
+// @desc    Get a user's most frequently bought items
+// @route   GET /api/orders/my-frequent-items
+// @access  Private/Customer
+const getFrequentItems = asyncHandler(async (req, res) => {
+  const frequentItems = await Order.aggregate([
+    { $match: { user: req.user._id } },
+    { $unwind: "$orderItems" },
+    {
+      $group: {
+        _id: "$orderItems.product",
+        name: { $first: "$orderItems.name" },
+        totalBought: { $sum: "$orderItems.qty" },
+      },
+    },
+    { $sort: { totalBought: -1 } },
+    { $limit: 5 },
+  ]);
+
+  res.json(frequentItems);
+});
+
+export {
+  addOrderItems,
+  getOrders,
+  getMyOrders,
+  getDashboardStats,
+  getMySales,
+  getFrequentItems,
+};
