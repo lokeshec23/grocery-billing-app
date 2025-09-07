@@ -3,6 +3,25 @@ import { Card, Button, Table, Container, Row, Col } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { UserContext } from "../context/UserContext";
 import api from "../utils/api";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const StaffDashboard = () => {
   const [sales, setSales] = useState([]);
@@ -34,6 +53,38 @@ const StaffDashboard = () => {
     }
   }, [user]);
 
+  const aggregateDailySales = () => {
+    const salesByDate = {};
+    sales.forEach((sale) => {
+      const date = new Date(sale.createdAt).toLocaleDateString();
+      if (!salesByDate[date]) {
+        salesByDate[date] = 0;
+      }
+      salesByDate[date] += sale.totalPrice;
+    });
+    return salesByDate;
+  };
+
+  const salesData = aggregateDailySales();
+  const chartData = {
+    labels: Object.keys(salesData),
+    datasets: [
+      {
+        label: "Daily Sales",
+        data: Object.values(salesData),
+        backgroundColor: "rgba(54, 162, 235, 0.6)",
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: "top" },
+      title: { display: true, text: "Your Daily Sales" },
+    },
+  };
+
   return (
     <Container className="my-5">
       <Row className="align-items-center mb-4">
@@ -51,30 +102,43 @@ const StaffDashboard = () => {
       ) : error ? (
         <div className="alert alert-danger">{error}</div>
       ) : (
-        <Card className="p-4 shadow-sm">
-          {sales.length === 0 ? (
-            <p>You have not recorded any sales yet.</p>
-          ) : (
-            <Table striped bordered hover responsive className="table-sm">
-              <thead>
-                <tr>
-                  <th>DATE</th>
-                  <th>TOTAL</th>
-                  <th>ITEMS</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sales.map((sale) => (
-                  <tr key={sale._id}>
-                    <td>{new Date(sale.createdAt).toLocaleDateString()}</td>
-                    <td>${sale.totalPrice.toFixed(2)}</td>
-                    <td>{sale.orderItems.length} items</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          )}
-        </Card>
+        <Row>
+          <Col md={12} className="mb-4">
+            {sales.length > 0 ? (
+              <Card className="p-4 shadow-sm">
+                <Bar options={chartOptions} data={chartData} />
+              </Card>
+            ) : (
+              <p className="text-center">
+                You have not recorded any sales yet.
+              </p>
+            )}
+          </Col>
+          <Col md={12}>
+            {sales.length > 0 && (
+              <Card className="p-4 shadow-sm">
+                <Table striped bordered hover responsive className="table-sm">
+                  <thead>
+                    <tr>
+                      <th>DATE</th>
+                      <th>TOTAL</th>
+                      <th>ITEMS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sales.map((sale) => (
+                      <tr key={sale._id}>
+                        <td>{new Date(sale.createdAt).toLocaleDateString()}</td>
+                        <td>${sale.totalPrice.toFixed(2)}</td>
+                        <td>{sale.orderItems.length} items</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </Card>
+            )}
+          </Col>
+        </Row>
       )}
     </Container>
   );

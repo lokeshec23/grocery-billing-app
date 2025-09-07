@@ -3,6 +3,10 @@ import { Card, Button, Row, Col, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { UserContext } from "../context/UserContext";
 import api from "../utils/api";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const CustomerDashboard = () => {
   const [frequentItems, setFrequentItems] = useState([]);
@@ -34,6 +38,32 @@ const CustomerDashboard = () => {
     }
   }, [user]);
 
+  const chartData = {
+    labels: frequentItems.map((item) => item.name),
+    datasets: [
+      {
+        label: "Units Bought",
+        data: frequentItems.map((item) => item.totalBought),
+        backgroundColor: [
+          "#FF6384",
+          "#36A2EB",
+          "#FFCE56",
+          "#4BC0C0",
+          "#9966FF",
+        ],
+        hoverOffset: 4,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: "right" },
+      title: { display: true, text: "Your Frequently Bought Items" },
+    },
+  };
+
   return (
     <Container className="my-5">
       <h1 className="text-center mb-4">Welcome to our store!</h1>
@@ -48,19 +78,7 @@ const CustomerDashboard = () => {
             ) : frequentItems.length === 0 ? (
               <p>Start shopping to see your recommendations here!</p>
             ) : (
-              <ul className="list-group list-group-flush">
-                {frequentItems.map((item, index) => (
-                  <li
-                    key={index}
-                    className="list-group-item d-flex justify-content-between align-items-center"
-                  >
-                    {item.name}
-                    <span className="badge bg-primary rounded-pill">
-                      {item.totalBought} units
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <Doughnut data={chartData} options={chartOptions} />
             )}
           </Card>
         </Col>
