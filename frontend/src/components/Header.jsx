@@ -1,8 +1,16 @@
-import React from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
+import React, { useContext } from "react";
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import { UserContext } from "../context/UserContext";
 
 const Header = () => {
+  const { state, dispatch } = useContext(UserContext);
+  const { user } = state;
+
+  const logoutHandler = () => {
+    dispatch({ type: "LOGOUT" });
+  };
+
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
@@ -13,14 +21,24 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <LinkContainer to="/login">
-                <Nav.Link>
-                  <i className="fas fa-user"></i> Sign In
-                </Nav.Link>
-              </LinkContainer>
-              <LinkContainer to="/products">
-                <Nav.Link>Products</Nav.Link>
-              </LinkContainer>
+              {user ? (
+                <NavDropdown title={user.name} id="username">
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <LinkContainer to="/login">
+                  <Nav.Link>
+                    <i className="fas fa-user"></i> Sign In
+                  </Nav.Link>
+                </LinkContainer>
+              )}
+              {user && user.role === "admin" && (
+                <LinkContainer to="/products">
+                  <Nav.Link>Products</Nav.Link>
+                </LinkContainer>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
