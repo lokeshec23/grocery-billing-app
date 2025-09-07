@@ -8,7 +8,7 @@ import LoginScreen from "./screens/LoginScreen";
 import ProductListScreen from "./screens/ProductListScreen";
 import ProductAddScreen from "./screens/ProductAddScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
-import BillingScreen from "./screens/BillingScreen"; // Import the new screen
+import BillingScreen from "./screens/BillingScreen";
 
 const App = () => {
   return (
@@ -24,8 +24,7 @@ const App = () => {
             />
             <Route path="/products" element={<ProductListScreen />} />
             <Route path="/login" element={<LoginScreen />} />
-            <Route path="/billing" element={<BillingScreen />} />{" "}
-            {/* Add the new route */}
+            <Route path="/billing" element={<BillingScreen />} />
             <Route path="/" element={<HomeScreen />} exact />
           </Routes>
         </Container>

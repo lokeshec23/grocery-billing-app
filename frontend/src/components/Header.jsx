@@ -2,6 +2,12 @@ import React, { useContext } from "react";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { UserContext } from "../context/UserContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUser,
+  faShoppingCart,
+  faCog,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
   const { state, dispatch } = useContext(UserContext);
@@ -24,15 +30,18 @@ const Header = () => {
               {/* Conditional rendering for different roles */}
               {user && user.role === "staff" && (
                 <LinkContainer to="/billing">
-                  <Nav.Link>Billing</Nav.Link>
+                  <Nav.Link>
+                    <FontAwesomeIcon icon={faShoppingCart} /> Billing
+                  </Nav.Link>
                 </LinkContainer>
               )}
               {user && user.role === "admin" && (
                 <LinkContainer to="/products">
-                  <Nav.Link>Products</Nav.Link>
+                  <Nav.Link>
+                    <FontAwesomeIcon icon={faCog} /> Products
+                  </Nav.Link>
                 </LinkContainer>
               )}
-              {/* Add a link for customer to view orders (to be built later) */}
               {user && user.role === "customer" && (
                 <LinkContainer to="/my-orders">
                   <Nav.Link>My Orders</Nav.Link>
@@ -40,7 +49,14 @@ const Header = () => {
               )}
 
               {user ? (
-                <NavDropdown title={user.name} id="username">
+                <NavDropdown
+                  title={
+                    <span>
+                      <FontAwesomeIcon icon={faUser} /> {user.name}
+                    </span>
+                  }
+                  id="username"
+                >
                   <NavDropdown.Item onClick={logoutHandler}>
                     Logout
                   </NavDropdown.Item>
@@ -48,7 +64,7 @@ const Header = () => {
               ) : (
                 <LinkContainer to="/login">
                   <Nav.Link>
-                    <i className="fas fa-user"></i> Sign In
+                    <FontAwesomeIcon icon={faUser} /> Sign In
                   </Nav.Link>
                 </LinkContainer>
               )}
