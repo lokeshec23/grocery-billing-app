@@ -6,7 +6,9 @@ import Footer from "./components/Footer";
 import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 import ProductListScreen from "./screens/ProductListScreen";
-import ProductFormScreen from "./screens/ProductFormScreen"; // Import the new screen
+import ProductAddScreen from "./screens/ProductAddScreen";
+import ProductEditScreen from "./screens/ProductEditScreen";
+import BillingScreen from "./screens/BillingScreen"; // Import the new screen
 
 const App = () => {
   return (
@@ -15,11 +17,16 @@ const App = () => {
       <main className="py-3">
         <Container>
           <Routes>
-            <Route path="/" element={<HomeScreen />} exact />
-            <Route path="/login" element={<LoginScreen />} />
+            <Route path="/admin/product/add" element={<ProductAddScreen />} />
+            <Route
+              path="/admin/product/:id/edit"
+              element={<ProductEditScreen />}
+            />
             <Route path="/products" element={<ProductListScreen />} />
-            <Route path="/products/create" element={<ProductFormScreen />} />
-            <Route path="/products/:id/edit" element={<ProductFormScreen />} />
+            <Route path="/login" element={<LoginScreen />} />
+            <Route path="/billing" element={<BillingScreen />} />{" "}
+            {/* Add the new route */}
+            <Route path="/" element={<HomeScreen />} exact />
           </Routes>
         </Container>
       </main>

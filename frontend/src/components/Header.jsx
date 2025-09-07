@@ -21,6 +21,16 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
+              {user && user.role === "staff" && (
+                <LinkContainer to="/billing">
+                  <Nav.Link>Billing</Nav.Link>
+                </LinkContainer>
+              )}
+              {user && user.role === "admin" && (
+                <LinkContainer to="/products">
+                  <Nav.Link>Products</Nav.Link>
+                </LinkContainer>
+              )}
               {user ? (
                 <NavDropdown title={user.name} id="username">
                   <NavDropdown.Item onClick={logoutHandler}>
@@ -32,11 +42,6 @@ const Header = () => {
                   <Nav.Link>
                     <i className="fas fa-user"></i> Sign In
                   </Nav.Link>
-                </LinkContainer>
-              )}
-              {user && user.role === "admin" && (
-                <LinkContainer to="/products">
-                  <Nav.Link>Products</Nav.Link>
                 </LinkContainer>
               )}
             </Nav>
