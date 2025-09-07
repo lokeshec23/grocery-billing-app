@@ -11,6 +11,8 @@ import {
   faChartBar,
   faUserPlus,
   faStore,
+  faTruck,
+  faFileInvoiceDollar,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
@@ -31,7 +33,6 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              {/* Conditional rendering for different roles */}
               <LinkContainer to="/catalog">
                 <Nav.Link>
                   <FontAwesomeIcon icon={faStore} /> Shop
@@ -46,21 +47,31 @@ const Header = () => {
               )}
               {user && user.role === "admin" && (
                 <>
-                  <LinkContainer to="/products">
-                    <Nav.Link>
-                      <FontAwesomeIcon icon={faCog} /> Products
-                    </Nav.Link>
-                  </LinkContainer>
-                  <LinkContainer to="/inventory">
-                    <Nav.Link>
-                      <FontAwesomeIcon icon={faClipboardList} /> Inventory
-                    </Nav.Link>
-                  </LinkContainer>
-                  <LinkContainer to="/admin/sales-report">
-                    <Nav.Link>
-                      <FontAwesomeIcon icon={faChartBar} /> Sales
-                    </Nav.Link>
-                  </LinkContainer>
+                  <NavDropdown
+                    title={
+                      <span>
+                        <FontAwesomeIcon icon={faCog} /> Admin
+                      </span>
+                    }
+                    id="admin-dropdown"
+                  >
+                    <LinkContainer to="/products">
+                      <NavDropdown.Item>Products</NavDropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to="/inventory">
+                      <NavDropdown.Item>Inventory</NavDropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to="/admin/sales-report">
+                      <NavDropdown.Item>Sales Report</NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Divider />
+                    <LinkContainer to="/admin/suppliers">
+                      <NavDropdown.Item>Suppliers</NavDropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to="/admin/purchases">
+                      <NavDropdown.Item>Record Purchase</NavDropdown.Item>
+                    </LinkContainer>
+                  </NavDropdown>
                 </>
               )}
               {user && user.role === "customer" && (
@@ -68,7 +79,6 @@ const Header = () => {
                   <Nav.Link>My Orders</Nav.Link>
                 </LinkContainer>
               )}
-
               {user ? (
                 <NavDropdown
                   title={

@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const productSchema = mongoose.Schema(
   {
     user: {
-      // To know which admin added this product
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
@@ -23,7 +22,11 @@ const productSchema = mongoose.Schema(
       unique: true,
     },
     mrp: {
-      // Maximum Retail Price
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    costPrice: {
       type: Number,
       required: true,
       default: 0,
@@ -34,7 +37,6 @@ const productSchema = mongoose.Schema(
       default: 0,
     },
     taxRate: {
-      // Tax rate in percentage
       type: Number,
       required: true,
       default: 0,

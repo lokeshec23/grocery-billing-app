@@ -14,6 +14,8 @@ import BillingScreen from "./screens/BillingScreen";
 import InventoryScreen from "./screens/InventoryScreen";
 import OrderListScreen from "./screens/OrderListScreen";
 import ProductCatalogScreen from "./screens/ProductCatalogScreen";
+import SupplierScreen from "./screens/SupplierScreen";
+import PurchaseScreen from "./screens/PurchaseScreen";
 
 const App = () => {
   return (
@@ -34,6 +36,8 @@ const App = () => {
             <Route path="/billing" element={<BillingScreen />} />
             <Route path="/inventory" element={<InventoryScreen />} />
             <Route path="/admin/sales-report" element={<OrderListScreen />} />
+            <Route path="/admin/suppliers" element={<SupplierScreen />} />
+            <Route path="/admin/purchases" element={<PurchaseScreen />} />
             <Route path="/catalog" element={<ProductCatalogScreen />} />
             <Route path="/" element={<HomeScreen />} exact />
           </Routes>
