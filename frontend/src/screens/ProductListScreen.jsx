@@ -63,7 +63,7 @@ const ProductListScreen = () => {
           <h1>Products</h1>
         </Col>
         <Col className="text-end">
-          <LinkContainer to="/products/create">
+          <LinkContainer to="/admin/add">
             <Button className="my-3">
               <i className="fas fa-plus"></i> Create Product
             </Button>

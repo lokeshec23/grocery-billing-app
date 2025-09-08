@@ -45,7 +45,7 @@ const App = () => {
 
               {/* Grouped Admin Routes */}
               <Route path="/admin">
-                <Route path="product/add" element={<ProductAddScreen />} />
+                <Route path="add" element={<ProductAddScreen />} />
                 <Route
                   path="product/:id/edit"
                   element={<ProductEditScreen />}
