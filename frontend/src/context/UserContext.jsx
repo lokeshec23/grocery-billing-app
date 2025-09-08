@@ -1,8 +1,8 @@
 import React, { createContext, useReducer, useEffect } from "react";
 
 const initialState = {
-  user: localStorage.getItem("userInfo")
-    ? JSON.parse(localStorage.getItem("userInfo"))
+  user: sessionStorage.getItem("userInfo")
+    ? JSON.parse(sessionStorage.getItem("userInfo"))
     : null,
 };
 
@@ -24,9 +24,9 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (state.user) {
-      localStorage.setItem("userInfo", JSON.stringify(state.user));
+      sessionStorage.setItem("userInfo", JSON.stringify(state.user));
     } else {
-      localStorage.removeItem("userInfo");
+      sessionStorage.removeItem("userInfo");
     }
   }, [state.user]);
 

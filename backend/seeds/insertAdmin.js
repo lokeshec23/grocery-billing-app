@@ -22,9 +22,9 @@ connectDB();
 const importAdminUser = async () => {
   try {
     const adminUser = {
-      name: "Admin User",
-      email: "admin@admin.com",
-      password: "123",
+      name: "Lokesh",
+      email: "lokesh.ec23@gmail.com",
+      password: "Test@123", // Plain password
       role: "admin",
     };
 
