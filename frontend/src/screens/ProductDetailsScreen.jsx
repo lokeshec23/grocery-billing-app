@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
+import { useParams, useNavigate } from "react-router-dom";
+import { Row, Col, Image, Card, Button, ListGroup } from "react-bootstrap";
 import api from "../utils/api";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
@@ -19,7 +19,6 @@ const ProductDetailsScreen = () => {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        // Add config with Authorization header
         const config = {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -33,11 +32,9 @@ const ProductDetailsScreen = () => {
         setLoading(false);
       }
     };
-    // Fetch product only if a user is logged in
     if (user) {
       fetchProduct();
     } else {
-      // Handle case where no user is logged in, e.g., redirect or show message
       setError("Please log in to view product details.");
       setLoading(false);
     }
@@ -50,7 +47,7 @@ const ProductDetailsScreen = () => {
   return (
     <>
       <Button className="btn btn-light my-3" onClick={goBackHandler}>
-        Go Back
+        ← Back
       </Button>
       {loading ? (
         <Loader />
@@ -58,49 +55,79 @@ const ProductDetailsScreen = () => {
         <Message variant="danger">{error}</Message>
       ) : (
         <Row>
-          <Col md={6}>
-            <Image
-              src={
-                product.image ||
-                "https://via.placeholder.com/600x400?text=No+Image"
-              }
-              alt={product.name}
-              fluid
-            />
+          {/* LEFT SIDE - Product Image + Buttons */}
+          <Col md={5} className="d-flex flex-column align-items-center">
+            <Card className="p-3 shadow-sm w-100 text-center sticky-top">
+              <Image
+                src={
+                  product.image ||
+                  "https://via.placeholder.com/400x400?text=No+Image"
+                }
+                alt={product.name}
+                fluid
+                style={{ maxHeight: "400px", objectFit: "contain" }}
+              />
+              <div className="d-grid gap-2 mt-3">
+                <Button variant="warning" size="lg">
+                  ADD TO CART
+                </Button>
+                <Button variant="success" size="lg">
+                  BUY NOW
+                </Button>
+              </div>
+            </Card>
           </Col>
-          <Col md={6}>
-            <Card>
+
+          {/* RIGHT SIDE - Product Details */}
+          <Col md={7}>
+            <Card className="p-4 shadow-sm">
+              {/* Product Title */}
+              <h3 className="mb-2">{product.name}</h3>
+
+              {/* Rating placeholder */}
+              <div className="d-flex align-items-center mb-3">
+                <span className="badge bg-success me-2">4.3 ★</span>
+                <small className="text-muted">
+                  (2,345 ratings & 345 reviews)
+                </small>
+              </div>
+
+              {/* Price section */}
+              <h2 className="text-danger mb-3">₹{product.mrp.toFixed(2)}</h2>
+
+              {/* Offers placeholder */}
+              <div className="mb-3">
+                <h6>Available offers</h6>
+                <ul className="list-unstyled">
+                  <li>✔ Bank Offer: 10% off on selected cards</li>
+                  <li>✔ Special Price: Get extra 5% off (T&C)</li>
+                  <li>✔ Free Delivery on your first order</li>
+                </ul>
+              </div>
+
+              {/* Specs */}
               <ListGroup variant="flush">
                 <ListGroup.Item>
-                  <h3>{product.name}</h3>
-                </ListGroup.Item>
-                <ListGroup.Item>
                   <Row>
-                    <Col>Category:</Col>
+                    <Col className="fw-bold">Category:</Col>
                     <Col>{product.category}</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Row>
-                    <Col>Barcode:</Col>
+                    <Col className="fw-bold">Barcode:</Col>
                     <Col>{product.barcode}</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Row>
-                    <Col>MRP:</Col>
-                    <Col>₹{product.mrp.toFixed(2)}</Col>
+                    <Col className="fw-bold">Stock:</Col>
+                    <Col>{product.stock} units</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Row>
-                    <Col>Stock:</Col>
-                    <Col>₹{product.stock}</Col>
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Tax Rate:</Col>
+                    <Col className="fw-bold">Tax Rate:</Col>
                     <Col>{product.taxRate}%</Col>
                   </Row>
                 </ListGroup.Item>
