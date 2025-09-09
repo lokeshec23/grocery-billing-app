@@ -1,8 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Col, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import { UserContext } from "../context/UserContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 const StaffRegisterScreen = () => {
   const [name, setName] = useState("");
@@ -10,6 +12,7 @@ const StaffRegisterScreen = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { state } = useContext(UserContext);
   const { user } = state;
@@ -50,6 +53,10 @@ const StaffRegisterScreen = () => {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className="d-flex justify-content-center my-5">
       <Col md={6}>
@@ -81,13 +88,21 @@ const StaffRegisterScreen = () => {
 
           <Form.Group className="mb-3" controlId="password">
             <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <InputGroup>
+              <Form.Control
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <Button
+                variant="outline-secondary"
+                onClick={togglePasswordVisibility}
+              >
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </Button>
+            </InputGroup>
           </Form.Group>
 
           <Button type="submit" variant="primary">
