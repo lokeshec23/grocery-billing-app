@@ -27,7 +27,7 @@ const getProductById = asyncHandler(async (req, res) => {
 // @route   POST /api/products
 // @access  Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
-  const { name, category, barcode, mrp, stock, taxRate } = req.body;
+  const { name, category, barcode, mrp, stock, taxRate, image } = req.body;
 
   const productExists = await Product.findOne({ $or: [{ name }, { barcode }] });
 
@@ -44,6 +44,7 @@ const createProduct = asyncHandler(async (req, res) => {
     mrp,
     stock,
     taxRate,
+    image,
   });
 
   const createdProduct = await product.save();
@@ -54,7 +55,7 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, category, barcode, mrp, stock, taxRate } = req.body;
+  const { name, category, barcode, mrp, stock, taxRate, image } = req.body;
 
   const product = await Product.findById(req.params.id);
 
@@ -65,6 +66,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.mrp = mrp || product.mrp;
     product.stock = stock || product.stock;
     product.taxRate = taxRate || product.taxRate;
+    product.image = image || product.image;
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);

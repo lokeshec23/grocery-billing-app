@@ -9,14 +9,11 @@ import {
   Form,
   InputGroup,
 } from "react-bootstrap";
+import { Link } from "react-router-dom"; // Import Link
 import { UserContext } from "../context/UserContext";
 import api from "../utils/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faShoppingCart,
-  faPlus,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 const ProductCatalogScreen = () => {
   const [products, setProducts] = useState([]);
@@ -206,8 +203,19 @@ const ProductCatalogScreen = () => {
                   className="mb-4"
                 >
                   <Card className="h-100">
+                    <Card.Img
+                      variant="top"
+                      src={
+                        product.image ||
+                        "https://via.placeholder.com/200x150?text=No+Image"
+                      }
+                    />
                     <Card.Body>
-                      <Card.Title>{product.name}</Card.Title>
+                      <Card.Title>
+                        <Link to={`/products/${product._id}`}>
+                          {product.name}
+                        </Link>
+                      </Card.Title>
                       <Card.Text>
                         <strong>₹{product.mrp.toFixed(2)}</strong>
                       </Card.Text>

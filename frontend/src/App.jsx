@@ -13,6 +13,9 @@ const MyOrdersScreen = lazy(() => import("./screens/MyOrdersScreen"));
 const ProductListScreen = lazy(() => import("./screens/ProductListScreen"));
 const ProductAddScreen = lazy(() => import("./screens/ProductAddScreen"));
 const ProductEditScreen = lazy(() => import("./screens/ProductEditScreen"));
+const ProductDetailsScreen = lazy(() =>
+  import("./screens/ProductDetailsScreen")
+);
 const BillingScreen = lazy(() => import("./screens/BillingScreen"));
 const InventoryScreen = lazy(() => import("./screens/InventoryScreen"));
 const OrderListScreen = lazy(() => import("./screens/OrderListScreen"));
@@ -41,6 +44,7 @@ const App = () => {
               <Route path="/billing" element={<BillingScreen />} />
               <Route path="/inventory" element={<InventoryScreen />} />
               <Route path="/products" element={<ProductListScreen />} />
+              <Route path="/products/:id" element={<ProductDetailsScreen />} />
               <Route path="/catalog" element={<ProductCatalogScreen />} />
 
               {/* Grouped Admin Routes */}

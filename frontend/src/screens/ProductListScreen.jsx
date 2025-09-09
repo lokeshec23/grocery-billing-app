@@ -3,7 +3,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../utils/api";
 const ProductListScreen = () => {
   const [products, setProducts] = useState([]);
@@ -85,12 +85,14 @@ const ProductListScreen = () => {
           {products.map((product) => (
             <tr key={product._id}>
               <td>{product._id}</td>
-              <td>{product.name}</td>
+              <td>
+                <Link to={`/products/${product._id}`}>{product.name}</Link>
+              </td>
               <td>₹ {product.mrp}</td>
               <td>{product.category}</td>
               <td>{product.stock}</td>
               <td>
-                <LinkContainer to={`/products/${product._id}/edit`}>
+                <LinkContainer to={`/admin/product/${product._id}/edit`}>
                   <Button variant="light" className="btn-sm mx-2">
                     <i className="fas fa-edit"></i>
                   </Button>
