@@ -27,6 +27,8 @@ const PurchaseScreen = lazy(() => import("./screens/PurchaseScreen"));
 const DiscountScreen = lazy(() => import("./screens/DiscountScreen"));
 const StaffRegisterScreen = lazy(() => import("./screens/StaffRegisterScreen"));
 
+const PaymentScreen = lazy(() => import("./screens/PaymentScreen"));
+
 const App = () => {
   return (
     <Router>
@@ -42,6 +44,7 @@ const App = () => {
               <Route path="/home" element={<HomeScreen />} />
               <Route path="/my-orders" element={<MyOrdersScreen />} />
               <Route path="/billing" element={<BillingScreen />} />
+              <Route path="/payment" element={<PaymentScreen />} />
               <Route path="/inventory" element={<InventoryScreen />} />
               <Route path="/products" element={<ProductListScreen />} />
               <Route path="/products/:id" element={<ProductDetailsScreen />} />

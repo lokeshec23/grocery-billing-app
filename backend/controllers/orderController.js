@@ -19,6 +19,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("No order items");
   } else {
+    // Note: Stock will now be updated *after* payment is confirmed
     const order = new Order({
       orderItems,
       user: req.user._id,
@@ -27,12 +28,26 @@ const addOrderItems = asyncHandler(async (req, res) => {
       taxPrice,
       discountAmount,
       totalPrice,
+      isPaid: false, // Order is initially unpaid
     });
 
     const createdOrder = await order.save();
+    res.status(201).json(createdOrder);
+  }
+});
 
-    // Loop through order items and update product stock
-    for (const item of createdOrder.orderItems) {
+// @desc    Update order to paid
+// @route   PUT /api/orders/:id/pay
+// @access  Private
+const updateOrderToPaid = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    order.isPaid = true;
+    order.paidAt = Date.now();
+
+    // Update product stock when the order is paid
+    for (const item of order.orderItems) {
       const product = await Product.findById(item.product);
       if (product) {
         product.stock -= item.qty;
@@ -40,7 +55,11 @@ const addOrderItems = asyncHandler(async (req, res) => {
       }
     }
 
-    res.status(201).json(createdOrder);
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error("Order not found");
   }
 });
 
@@ -142,4 +161,5 @@ export {
   getDashboardStats,
   getMySales,
   getFrequentItems,
+  updateOrderToPaid,
 };

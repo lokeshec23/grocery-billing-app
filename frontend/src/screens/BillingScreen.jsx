@@ -190,14 +190,10 @@ const BillingScreen = () => {
         config
       );
 
-      setLastOrder(data); // Store the created order
-      setCart([]);
-      setDiscountAmount(0);
-      setDiscountCode("");
-      setCheckoutMessage({
-        type: "success",
-        text: "Order placed successfully!",
-      });
+      // Navigate to the payment page with the new order data
+      navigate("/payment", { state: { order: data } });
+
+      // The rest of the logic (cart reset, etc.) will happen after payment is confirmed.
     } catch (err) {
       setCheckoutMessage({
         type: "danger",
@@ -410,7 +406,7 @@ const BillingScreen = () => {
                 onClick={checkoutHandler}
                 disabled={cart.length === 0}
               >
-                Checkout
+                Proceed to Payment
               </Button>
             </Card>
           </Col>

@@ -1,3 +1,4 @@
+// File: backend/models/userModel.js
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
@@ -20,7 +21,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
       default: "staff",
-      enum: ["staff", "admin", "customer"], // Add 'customer' here
+      enum: ["staff", "admin", "customer"],
     },
   },
   {
@@ -28,7 +29,6 @@ const userSchema = mongoose.Schema(
   }
 );
 
-// Hash password before saving the user
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();
@@ -38,7 +38,6 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-// Method to compare entered password with hashed password
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
