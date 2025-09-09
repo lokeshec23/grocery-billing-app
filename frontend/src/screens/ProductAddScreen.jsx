@@ -11,6 +11,7 @@ const ProductAddScreen = () => {
   const [mrp, setMrp] = useState(0);
   const [stock, setStock] = useState(0);
   const [taxRate, setTaxRate] = useState(0);
+  const [image, setImage] = useState(""); // Add state for the image URL
   const [error, setError] = useState(null);
   const { state } = useContext(UserContext);
   const { user } = state;
@@ -37,7 +38,7 @@ const ProductAddScreen = () => {
 
       await api.post(
         "/products",
-        { name, category, barcode, mrp, stock, taxRate },
+        { name, category, barcode, mrp, stock, taxRate, image },
         config
       );
 
@@ -60,6 +61,17 @@ const ProductAddScreen = () => {
               placeholder="Enter product name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              required
+            ></Form.Control>
+          </Form.Group>
+
+          <Form.Group controlId="image" className="mb-3">
+            <Form.Label>Image URL</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter image URL"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
               required
             ></Form.Control>
           </Form.Group>

@@ -43,7 +43,9 @@ const productSchema = mongoose.Schema(
     },
     image: {
       type: String,
-      required: false,
+      required: true, // Image is now a required field
+      default:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLXraBg2V7bFkcJ_2dhzl8IQTODmPHC9bAlAk6sMf8xd6Z90wE-GrtM1Tp2f2l7yz6nto&usqp=CAU", // Default image URL
     },
   },
   {

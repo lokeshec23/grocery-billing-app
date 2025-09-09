@@ -17,6 +17,7 @@ const ProductFormScreen = () => {
   const [mrp, setMrp] = useState(0);
   const [stock, setStock] = useState(0);
   const [taxRate, setTaxRate] = useState(0);
+  const [image, setImage] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -40,6 +41,7 @@ const ProductFormScreen = () => {
       setMrp(data.mrp);
       setStock(data.stock);
       setTaxRate(data.taxRate);
+      setImage(data.image);
       setLoading(false);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch product data");
@@ -53,7 +55,7 @@ const ProductFormScreen = () => {
     setError(null);
     setLoading(true);
 
-    const productData = { name, category, barcode, mrp, stock, taxRate };
+    const productData = { name, category, barcode, mrp, stock, taxRate, image };
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -144,6 +146,17 @@ const ProductFormScreen = () => {
               placeholder="Enter tax rate"
               value={taxRate}
               onChange={(e) => setTaxRate(e.target.value)}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="image">
+            <Form.Label>Image URL</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter image URL"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
               required
             />
           </Form.Group>
